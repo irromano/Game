@@ -92,6 +92,25 @@ void BSTY::adjustHeights(NodeT *n) {
 	return;
 
 }
+/*findBalance(NodeT *n)
+ * Returns the left minus right balance of a particular NodeT. This is a helper method
+ * for other methods in BSTY, and should not be used explicitly.
+ * Parameters-
+ * 		NodeT *n: The node whose balance is to be checked.
+ * Returns-
+ * 		int: the integer representing the balance of n (left->height - right->height).
+ */
+int BSTY::findBalance(NodeT *n) {
+	if (n->left == NULL && n->right == NULL) {	//Node n has no children
+		return 1;
+	} else if (n->left == NULL) {			//Node n only has a right child
+		return n->right->height * -1;
+	} else if (n->right == NULL) {			//Node n only has a left child
+		return n->left->height;
+	} else {								//Node n has both children
+		return n->left->height - n->right->height;
+	}
+}
 
 void BSTY::printTreeIO() {
 	if (root == NULL) {

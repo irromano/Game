@@ -14,6 +14,7 @@ public:
 	BSTY();
 	bool insertit(string x);
 	void adjustHeights(NodeT *n);
+	int findBalance(NodeT *n);
 	void printTreeIO();
 	void printTreeIO(NodeT *n);
 	void printTreePre();
