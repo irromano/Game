@@ -9,7 +9,7 @@
 #define GAME_HPP_
 
 #include "BSTY.hpp"
-#include "SLL.hpp"
+#include "LL.hpp"
 
 class Game {
 	BSTY *dict;
@@ -17,7 +17,7 @@ class Game {
 	char *currletters;
 	int numright;
 	int totalwords;
-	SLL *wordlist;
+	LL *wordlist;
 public:
 	Game();
 	Game(string infile);

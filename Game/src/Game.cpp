@@ -8,10 +8,10 @@
 #include <iostream>
 #include "BSTY.hpp"
 #include "Game.hpp"
-#include "SLL.hpp"
 #include <stdlib.h>
 #include <string>
 #include <fstream>
+#include "LL.hpp"
 
 using namespace std;
 
@@ -29,7 +29,7 @@ Game::Game(string filen){
 	numletters = 0;
 	numright = 0;
 	totalwords = 0;
-	wordlist = new SLL();
+	wordlist = new LL();
 }
 
 void Game::startGame() {
@@ -53,7 +53,7 @@ void Game::getWords() {
 	string s;
 	cin >> s;
 	while (s != "-1") {
-		wordlist->push(wordlist->size, s);
+		wordlist->push(s);
 		cin >> s;
 		cout << endl;
 	}
