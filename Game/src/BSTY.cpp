@@ -89,6 +89,17 @@ void BSTY::adjustHeights(NodeT *n) {
 			return;
 		temp = temp->parent;
 	}
+	if (!checkBalance(temp)) {
+		adjustHeights(temp->parent);
+	}
+	/*if (findBalance(n) > 1) {
+		if (findBalance)
+		rotateRight(n);
+		adjustHeights(n->parent);
+	} else if (findBalance(n) < -1) {
+		rotateLeft(n);
+		adjustHeights(n->parent);
+	}*/
 	return;
 
 }
@@ -218,6 +229,92 @@ NodeT *BSTY::find(string x) {
 		cout << x << "Not found" << endl;
 		return NULL;
 	}
+}
+
+bool BSTY::checkBalance(NodeT *n) {
+	if (findBalance(n) > 1) {
+		if (findBalance(n->left) < 0) {
+			n->left = rotateLeft(n->left);
+			rotateRight(n);
+			return true;
+		} else {
+			rotateRight(n);
+			return true;
+		}
+	} else if (findBalance(n) < -1) {
+		if (findBalance(n->right) > 0) {
+			n->right = rotateRight(n->right);
+			rotateLeft(n);
+			return true;
+		} else {
+			rotateLeft(n);
+			return true;
+		}
+	} else {
+		return false;
+	}
+}
+
+NodeT *BSTY::rotateRight(NodeT *n) {
+	NodeT *tmp = n->left;
+	NodeT *tmp2 = tmp->right;
+	tmp->right = n;
+	n->left = tmp2;
+	if (tmp2 != NULL) {
+		tmp2->parent = n;
+	}
+	if (n->parent != NULL) {
+		tmp->parent = n->parent;
+		if (n->parent->right == n) {
+			n->parent->right = tmp;
+		} else {
+			n->parent->left = tmp;
+		}
+	} else {
+		root = tmp;
+		tmp->parent = NULL;
+	}
+	n->parent = tmp;
+	/*if (n->left->getHeight() > n->right->getHeight()) {
+		n->height = n->left->getHeight() + 1;
+	} else {
+		n->height = n->right->getHeight() + 1;
+	}
+	if (tmp->left->getHeight() > tmp->right->getHeight()) {
+		tmp->height = tmp->left->getHeight();
+	} else {
+		tmp->height = tmp->right->getHeight() + 1;
+	}*/
+	return tmp;
+
+}
+
+NodeT *BSTY::rotateLeft(NodeT *n) {
+	NodeT *tmp = n->right;
+	NodeT *tmp2 = tmp->left;
+	tmp->left = n;
+	n->right = tmp2;
+	if (tmp2 != NULL) {
+		tmp2->parent = n;
+	}
+	if (n->parent != NULL) {
+		tmp->parent = n->parent;
+		if (n->parent->right == n) {
+			n->parent->right = tmp;
+		} else {
+			n->parent->left = tmp;
+		}
+	} else {
+		root = tmp;
+		tmp->parent = NULL;
+	}
+	n->parent = tmp;
+	/*if (n->left->getHeight() > tmp->right->getHeight()) {
+		tmp->height = tmp->left->getHeight() + 1;
+	} else {
+		tmp->height = tmp->right->getHeight() + 1;
+	}*/
+	return tmp;
 }
 
 /*************************************************************************************/
