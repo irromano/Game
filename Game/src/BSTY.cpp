@@ -19,12 +19,12 @@ BSTY::BSTY() {
 // Note2: after you've inserted a new node, you should call the 
 // adjustHeights method that will update the heights of all the 
 // ancestors of the node that was just inserted.
-bool BSTY::insertit(string x) {
-	//NodeT *n = new NodeT;
+bool BSTY::insertit(string word) {
+	cout << "inserting " << word << endl;
 	int i = 0;
 	if (root == NULL) {
 		//n->data = x;
-		root = new NodeT(x);
+		root = new NodeT(word);
 		i++;
 		return true;
 		//set root to new Node, with data x
@@ -32,32 +32,37 @@ bool BSTY::insertit(string x) {
 	NodeT* temp = root;
 	//root = n;
 	while (temp != NULL) {
-		if (x == temp->data) {
-			cout << x << "Already found" << endl;
+		if (word == temp->data) {
+			cout << word << "Already found" << endl;
 			return false;
-		}
-		if (x < temp->data) {
+		} else if (word < temp->data) {
 			if (temp->left == NULL) {
-				temp->left = new NodeT(x);
+				temp->left = new NodeT(word);
 				temp->left->parent = temp;
 				i++;
 				adjustHeights(temp->left);
 				return true;
+			} else {
+				temp = temp->left;
 			}
-			temp = temp->left;
-		}
-		if (x >= temp->data) {
+		} else {
 			if (temp->right == NULL) {
-				temp->right = new NodeT(x);
+				temp->right = new NodeT(word);
 				temp->right->parent = temp;
 				i++;
 				adjustHeights(temp->right);
 				return true;
+			} else {
+				temp = temp->right;
 			}
-			temp = temp->right;
 		}
 	}
+	return false;
 }
+bool BSTY::insertit(string x, string def) {
+	return insertit(x);
+}
+
 
 // the adjustHeights method updates the heights of every ancestor of the node n.
 // This method will be massively useful with our next lab, so make sure you have 
@@ -71,13 +76,12 @@ bool BSTY::insertit(string x) {
 // grandparent's height should be adjusted, etc.  The checking stops when either 
 // the loop has worked its way up to the root, or until the currently being checked
 // ancestor is not changed.  
-void BSTY::adjustHeights(NodeT *n) {
-	NodeT *temp = n; //setting our new node's parent as the next node to check
+void BSTY::adjustHeights(NodeT *node) {
+	NodeT *temp = node; //setting our new node's parent as the next node to check
 	if (temp->left == NULL && temp->right == NULL) {
 		temp->height = 1;
 	}
 	while (temp->parent != NULL) {
-		int oldHeight = temp->parent->height;
 		if (temp->parent->left == NULL || temp->parent->right == NULL) { //if this new node is the only child of the tree
 			temp->parent->height = temp->height + 1; //parent's height is only child's height +1
 		} else if (temp->parent->left->height >= temp->parent->right->height) { //height of parent's left child is >= height of parent's right child
@@ -85,24 +89,65 @@ void BSTY::adjustHeights(NodeT *n) {
 		} else {														//else
 			temp->parent->height = temp->parent->right->height + 1;	//parent's height is right child's height +1
 		}
-		if (oldHeight == temp->parent->height)//if parent's height does not change, end the function
-			return;
 		temp = temp->parent;
 	}
-	if (!checkBalance(temp)) {
-		adjustHeights(temp->parent);
+	temp = node;
+	while (temp != NULL) {
+		checkBalance(temp);
+		temp = temp->parent;
 	}
-	/*if (findBalance(n) > 1) {
-		if (findBalance)
-		rotateRight(n);
-		adjustHeights(n->parent);
-	} else if (findBalance(n) < -1) {
-		rotateLeft(n);
-		adjustHeights(n->parent);
-	}*/
 	return;
 
 }
+void BSTY::adjustHeightNoBalance(NodeT *node) {
+	NodeT *temp = node; //setting our new node's parent as the next node to check
+	if (temp->left == NULL && temp->right == NULL) {
+		temp->height = 1;
+	}
+	while (temp->parent != NULL) {
+		if (temp->parent->left == NULL || temp->parent->right == NULL) { //if this new node is the only child of the tree
+			temp->parent->height = temp->height + 1; //parent's height is only child's height +1
+		} else if (temp->parent->left->height >= temp->parent->right->height) { //height of parent's left child is >= height of parent's right child
+			temp->parent->height = temp->parent->left->height + 1; //parent's height is left child's height +1
+		} else {														//else
+			temp->parent->height = temp->parent->right->height + 1;	//parent's height is right child's height +1
+		}
+		temp = temp->parent;
+	}
+	return;
+
+}
+
+bool BSTY::checkBalance(NodeT *node) {
+	NodeT *left = node->left;
+	NodeT *right = node->right;
+	if (findBalance(node) > 1) {
+		cout << node->data << " must rotate right (2)" << endl;
+		if (findBalance(left) < 0) {
+			cout << left->data << " must rotate left (child)" << endl;
+			rotateLeft(left);
+			rotateRight(node);
+			return true;
+		} else {
+			rotateRight(node);
+			return true;
+		}
+	} else if (findBalance(node) < -1) {
+		cout << node->data << " must rotate left (-2)" << endl;
+		if (findBalance(right) > 0) {
+			cout << right->data << " must rotate right (child)" << endl;
+			rotateRight(right);
+			rotateLeft(node);
+			return true;
+		} else {
+			rotateLeft(node);
+			return true;
+		}
+	} else {
+		return false;
+	}
+}
+
 /*findBalance(NodeT *n)
  * Returns the left minus right balance of a particular NodeT. This is a helper method
  * for other methods in BSTY, and should not be used explicitly.
@@ -113,7 +158,7 @@ void BSTY::adjustHeights(NodeT *n) {
  */
 int BSTY::findBalance(NodeT *n) {
 	if (n->left == NULL && n->right == NULL) {	//Node n has no children
-		return 1;
+		return 0;
 	} else if (n->left == NULL) {			//Node n only has a right child
 		return n->right->height * -1;
 	} else if (n->right == NULL) {			//Node n only has a left child
@@ -231,90 +276,66 @@ NodeT *BSTY::find(string x) {
 	}
 }
 
-bool BSTY::checkBalance(NodeT *n) {
-	if (findBalance(n) > 1) {
-		if (findBalance(n->left) < 0) {
-			n->left = rotateLeft(n->left);
-			rotateRight(n);
-			return true;
+NodeT *BSTY::rotateRight(NodeT *node) {
+	NodeT *parent = node->parent;
+	NodeT *left = node->left;
+	NodeT *leftRight = left->right;
+	left->right = node;
+	node->left = leftRight;
+	if (leftRight != NULL) {
+		leftRight->parent = node;
+	}
+	if (node->parent != NULL) {
+		if (parent->left == node) {
+			parent->left = left;
 		} else {
-			rotateRight(n);
-			return true;
-		}
-	} else if (findBalance(n) < -1) {
-		if (findBalance(n->right) > 0) {
-			n->right = rotateRight(n->right);
-			rotateLeft(n);
-			return true;
-		} else {
-			rotateLeft(n);
-			return true;
+			parent->right = left;
 		}
 	} else {
-		return false;
+		root = left;
 	}
-}
-
-NodeT *BSTY::rotateRight(NodeT *n) {
-	NodeT *tmp = n->left;
-	NodeT *tmp2 = tmp->right;
-	tmp->right = n;
-	n->left = tmp2;
-	if (tmp2 != NULL) {
-		tmp2->parent = n;
-	}
-	if (n->parent != NULL) {
-		tmp->parent = n->parent;
-		if (n->parent->right == n) {
-			n->parent->right = tmp;
-		} else {
-			n->parent->left = tmp;
-		}
+	left->parent = parent;
+	node->parent = left;
+	if (node->left == NULL && node->right == NULL) {
+		adjustHeightNoBalance(node);
+	} else if (node->left != NULL) {
+		adjustHeightNoBalance(node->left);
 	} else {
-		root = tmp;
-		tmp->parent = NULL;
+		adjustHeightNoBalance(node->right);
 	}
-	n->parent = tmp;
-	/*if (n->left->getHeight() > n->right->getHeight()) {
-		n->height = n->left->getHeight() + 1;
-	} else {
-		n->height = n->right->getHeight() + 1;
-	}
-	if (tmp->left->getHeight() > tmp->right->getHeight()) {
-		tmp->height = tmp->left->getHeight();
-	} else {
-		tmp->height = tmp->right->getHeight() + 1;
-	}*/
-	return tmp;
+	return left;
 
 }
 
-NodeT *BSTY::rotateLeft(NodeT *n) {
-	NodeT *tmp = n->right;
-	NodeT *tmp2 = tmp->left;
-	tmp->left = n;
-	n->right = tmp2;
-	if (tmp2 != NULL) {
-		tmp2->parent = n;
+NodeT *BSTY::rotateLeft(NodeT *node) {
+	NodeT *parent = node->parent;
+	NodeT *right = node->right;
+	NodeT *rightLeft = right->left;
+	right->left = node;
+	node->right = rightLeft;
+	if (rightLeft != NULL) {
+		rightLeft->parent = node;
 	}
-	if (n->parent != NULL) {
-		tmp->parent = n->parent;
-		if (n->parent->right == n) {
-			n->parent->right = tmp;
+	if (parent != NULL) {
+		if (parent->left == node) {
+			parent->left = right;
 		} else {
-			n->parent->left = tmp;
+			parent->right = right;
 		}
 	} else {
-		root = tmp;
-		tmp->parent = NULL;
+		this->root = right;
 	}
-	n->parent = tmp;
-	/*if (n->left->getHeight() > tmp->right->getHeight()) {
-		tmp->height = tmp->left->getHeight() + 1;
+	right->parent = parent;
+	node->parent = right;
+	if (node->left == NULL && node->right == NULL) {
+		adjustHeightNoBalance(node);
+	} else if (node->left != NULL) {
+		adjustHeightNoBalance(node->left);
 	} else {
-		tmp->height = tmp->right->getHeight() + 1;
-	}*/
-	return tmp;
+		adjustHeightNoBalance(node->right);
+	}
+
+	return right;
 }
 
 /*************************************************************************************/

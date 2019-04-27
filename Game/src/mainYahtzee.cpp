@@ -14,11 +14,21 @@
 
 using namespace std;
 int main() {
-	 //PART 1
+
+//	BSTY *testTree1 = new BSTY();
+//	testTree1->insertit("e");
+//	testTree1->insertit("f");
+//	testTree1->insertit("g");
+//
+//	testTree1->printTreePost();
+//	cout << endl;
+
+
+//	 PART 1
 	string sarr[10] = {"run","tuxedo","ocelot","vast","bark","punctilios","hello","is","sibylic","go"};
 	treePuzzle(10,sarr,0);
 
-	//PART 2
+//	//PART 2
 	cout << endl << "A LOT OF LEFT ROTATIONS " << endl;
 	string sarr3[10] = {"a","b","c","d","e","f","g","h","i","j"};
 	treePuzzle(10,sarr3,3);

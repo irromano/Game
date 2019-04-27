@@ -60,12 +60,12 @@ void treePuzzle::readFile2(string fname, int size) {
 	int ct = 0;
 	while (!file.eof() && ct < size) {
 		file >> word;
-		//cout << word << endl;
+		cout << word << endl;
 		getline(file,def);
 		def = def.substr(2);
-		//tree->insertit(word,def);  		//PUT BACK IN!!!!
+		tree->insertit(word,def);  		//PUT BACK IN!!!!
 
-		//cout << def << endl;
+		cout << def << endl;
 	}
 
 }
