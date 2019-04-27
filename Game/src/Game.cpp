@@ -15,7 +15,7 @@
 
 using namespace std;
 
-Game::Game(){
+Game::Game() {
 	readTreeFromFile("usanoswears.txt");
 
 	numletters = 0;
@@ -23,7 +23,7 @@ Game::Game(){
 	totalwords = 0;
 }
 
-Game::Game(string filen){
+Game::Game(string filen) {
 	readTreeFromFile(filen);
 
 	numletters = 0;
@@ -44,9 +44,10 @@ void Game::startGame() {
 	cout << "Start generating words: " << endl;
 	getWords();
 	checkWordsForScore();
-	int score = numright * 3 - (totalwords-numright) * 6;
-	cout << "Number of valid words: " << numright << " Invalid words: " << (totalwords - numright) << endl;
-	cout << "Final Score is: "  << score << endl;
+	int score = numright * 3 - (totalwords - numright) * 6;
+	cout << "Number of valid words: " << numright << " Invalid words: "
+			<< (totalwords - numright) << endl;
+	cout << "Final Score is: " << score << endl;
 }
 
 void Game::getWords() {
@@ -61,17 +62,18 @@ void Game::getWords() {
 }
 
 char * Game::getLetters(int x) {
-	char vowel[5] = {'a','e','i','o','u'};
-	char conso[21] = {'b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','y','z'};
+	char vowel[5] = { 'a', 'e', 'i', 'o', 'u' };
+	char conso[21] = { 'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n',
+			'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z' };
 	char *curr = new char[x];
- 	int v = rand() %(x-2) + 1;
+	int v = rand() % (x - 2) + 1;
 
 	for (int i = 0; i < v; i++) {
-		int y = rand() %5;
+		int y = rand() % 5;
 		curr[i] = vowel[y];
 	}
 	for (int i = v; i < x; i++) {
-		int y = rand() %21;
+		int y = rand() % 21;
 		curr[i] = conso[y];
 	}
 	for (int i = 0; i < x; i++) {
@@ -86,7 +88,7 @@ bool Game::checkWLetters(string s) {
 	}
 	for (int i = 0; i < s.size(); i++) {
 		int j = 0;
-		while ((j < numletters) && (s[i] != tempchar[j] )) {
+		while ((j < numletters) && (s[i] != tempchar[j])) {
 			j++;
 		}
 		if (j == numletters) {
@@ -94,12 +96,12 @@ bool Game::checkWLetters(string s) {
 		}
 		tempchar[j] = '1';
 	}
-	if (dict->find(s)== NULL){
+	if (dict->find(s) == NULL) {
 		return false;
 	}
 	return true;
 }
-void Game:: checkWordsForScore() {
+void Game::checkWordsForScore() {
 	NodeL *tmp = wordlist.first;
 	while (tmp != NULL) {
 		if (checkWLetters(tmp->data)) {
@@ -127,7 +129,5 @@ void Game::readTreeFromFile (string dictfile) {
 	return;
 }
 
-	//=
-
-
+//=
 
