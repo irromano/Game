@@ -10,6 +10,7 @@ using namespace std;
 
 class NodeL {
 	friend class LL;
+	friend class Game;
 	string data;
 	NodeL *next;
 public:

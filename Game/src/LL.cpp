@@ -57,7 +57,24 @@ void LL::printList() {
 	}
 	cout << endl;
 }
-
+/*getScore()
+ * This method modifies the LL's score to the total score value of all words in the list. It
+ * Traverses the list and sum totals the score of each node, and changes the score attribute to
+ * match that total.
+ * Parameters-
+ * 		None
+ * Returns-
+ * 		Nothing
+ */
+void LL::getScore() {
+	int score = 0;
+	NodeL *temp = first;
+	while (temp != NULL) {
+		score++;
+		temp = temp->next;
+	}
+	this->score = score;
+}
 
 
 

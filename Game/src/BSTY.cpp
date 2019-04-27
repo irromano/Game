@@ -258,20 +258,22 @@ void BSTY::myPrint(NodeT *n) {
 // If it isn't, NULL is returned.  
 // NOTE: If the node can't be found, this method prints out that x can't be found.
 // if it is found, the printNode method is called for the node.  
-NodeT *BSTY::find(string x) {
+NodeT *BSTY::find(string word) {
+	int comparison = 0;
 	NodeT *tmp = root;
 	while (tmp != NULL) {
-		if (tmp->data == x) {
+		comparison++;
+		if (tmp->data == word) {
 			tmp->printNode();
 			return tmp;
-		} else if (tmp->data < x) {
+		} else if (tmp->data < word) {
 			tmp = tmp->right;
-		} else if (tmp->data > x) {
+		} else if (tmp->data > word) {
 			tmp = tmp->left;
 		}
 	}
 	if (tmp == NULL) {
-		cout << x << "Not found" << endl;
+		cout << word << "Not found" << endl;
 		return NULL;
 	}
 }

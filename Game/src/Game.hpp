@@ -17,7 +17,7 @@ class Game {
 	char *currletters;
 	int numright;
 	int totalwords;
-	LL *wordlist;
+	LL wordlist;
 public:
 	Game();
 	Game(string infile);

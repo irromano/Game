@@ -8,10 +8,10 @@
 #include <iostream>
 #include "BSTY.hpp"
 #include "Game.hpp"
+#include "LL.hpp"
 #include <stdlib.h>
 #include <string>
 #include <fstream>
-#include "LL.hpp"
 
 using namespace std;
 
@@ -29,7 +29,7 @@ Game::Game(string filen){
 	numletters = 0;
 	numright = 0;
 	totalwords = 0;
-	wordlist = new LL();
+//	wordlist = new LL();
 }
 
 void Game::startGame() {
@@ -53,11 +53,11 @@ void Game::getWords() {
 	string s;
 	cin >> s;
 	while (s != "-1") {
-		wordlist->push(s);
+		wordlist.push(s);
 		cin >> s;
 		cout << endl;
 	}
-	//wordlist->printList();
+	wordlist.printList();
 }
 
 char * Game::getLetters(int x) {
@@ -100,19 +100,18 @@ bool Game::checkWLetters(string s) {
 	return true;
 }
 void Game:: checkWordsForScore() {
-//	SNodeL *tmp = wordlist.first;
-//	while (tmp != NULL) {
-//		if (checkWLetters(tmp->word) ) {
-//			cout << tmp->word << " is okay " << endl;
-//
-//			numright++;
-//		}
-//		else {
-//			cout << tmp->word << " is invalid " << endl;
-//		}
-//		totalwords++;
-//		tmp = tmp->next;
-//	}
+	NodeL *tmp = wordlist.first;
+	while (tmp != NULL) {
+		if (checkWLetters(tmp->data)) {
+			cout << tmp->data << " is okay " << endl;
+
+			numright++;
+		} else {
+			cout << tmp->data << " is invalid " << endl;
+		}
+		totalwords++;
+		tmp = tmp->next;
+	}
 }
 
 void Game::readTreeFromFile (string dictfile) {
